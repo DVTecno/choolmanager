@@ -33,7 +33,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         servers = {
                 @Server(
                         description = "DEV SERVER",
-                        url = "http://localhost:8080"
+                        url = "https://choolmanager.onrender.com"
                 ),
                 @Server(
                         description = "PROD SERVER",
