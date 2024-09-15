@@ -36,11 +36,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         servers = {
                 @Server(
                         description = "DEV SERVER",
-                        url = "http://localhost:8080"
-                ),
-                @Server(
-                        description = "PROD SERVER",
-                        url = "https://www.schoolmanager.com"
+                        url = "https://choolmanager.onrender.com"
                 )
         },
         security = @SecurityRequirement(name = "bearerAuth")
