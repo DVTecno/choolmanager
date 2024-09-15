@@ -50,14 +50,31 @@ public class SecurityConfig {
                     http.requestMatchers(HttpMethod.POST, "/auth/refresh-token").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/api/forgot-password", "/api/reset_password").permitAll();
 
+                    http.requestMatchers(Arrays.toString(HttpMethod.values()), "/api/v1/subject/**").permitAll();
+                    http.requestMatchers(Arrays.toString(HttpMethod.values()), "/api/v1/course/**").permitAll();
+                    http.requestMatchers(Arrays.toString(HttpMethod.values()), "/api/v1/course-student/**").permitAll();
+
+
+
                     // Rutas accesibles solo con roles específicos
+                    http.requestMatchers(HttpMethod.GET, "/teacher/verifyStudent/**").hasAuthority("READ_PRIVILEGES");
+                    http.requestMatchers(HttpMethod.GET, "/admin/**").hasRole("ADMIN");
                     http.requestMatchers(HttpMethod.GET, "/api/v1/status/auth-student").hasAnyRole("STUDENT");
                     http.requestMatchers(HttpMethod.GET, "/api/v1/status/auth-teacher").hasAnyRole("TEACHER");
                     http.requestMatchers(HttpMethod.GET, "/api/v1/status/auth-parent").hasAnyRole("PARENT");
 
                     // Permisos para evaluaciones
+                    http.requestMatchers(HttpMethod.POST, "/admin/**").hasRole("ADMIN");
                     http.requestMatchers(HttpMethod.POST, "/evaluations/load").hasRole("TEACHER");
                     http.requestMatchers(HttpMethod.POST, "/evaluations/student").hasAnyRole("STUDENT", "PARENT");
+
+                    // Permisos para notificaciones
+                    http.requestMatchers(HttpMethod.POST, "/notifications/send/all").hasRole("TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/notifications/send/student").hasRole("TEACHER");
+                    http.requestMatchers(HttpMethod.POST, "/notifications/send/parent").hasRole("TEACHER");
+                    http.requestMatchers(HttpMethod.GET, "/notifications/course-notifications").hasAnyRole("STUDENT", "PARENT", "TEACHER");
+                    http.requestMatchers(HttpMethod.GET, "/notifications/student/{dni}").hasRole("STUDENT");
+                    http.requestMatchers(HttpMethod.GET, "/notifications/parent/{dni}").hasRole("PARENT");
 
                     // Denegar todas las demás solicitudes
                     http.anyRequest().denyAll();
@@ -77,7 +94,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "https://schoolmanager-nine.vercel.app/"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080", "https://schoolmanager-nine.vercel.app"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

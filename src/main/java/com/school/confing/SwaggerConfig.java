@@ -1,7 +1,6 @@
 package com.school.confing;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -9,11 +8,10 @@ import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
-import org.apache.catalina.filters.HttpHeaderSecurityFilter;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,22 +19,26 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         info = @Info(
                 title = "School Manager",
                 description = "El Sistema Ideal para tu escuela Ideal",
-                termsOfService = "www.schoolmanager.com/terminos_y_condiciones",
+                termsOfService = "https://schoolmanager-nine.vercel.app/terminos_y_condiciones",
                 version = "1.0.0",
                 contact = @Contact(
                         name = "School Manager",
-                        url = "https://www.schoolmanager.com",
+                        url = "https://schoolmanager-nine.vercel.app/",
                         email = "soporteschoolmanager@gmail.com"
                 ),
                 license = @License(
                         name = "Standard Software Use License for School Manager",
-                        url = "www.schoolmanager.com/licence"
+                        url = "https://schoolmanager-nine.vercel.app/licence"
                 )
         ),
         servers = {
                 @Server(
                         description = "DEV SERVER",
-                        url = "https://choolmanager.onrender.com"
+                        url = "http://localhost:8080"
+                ),
+                @Server(
+                        description = "PROD SERVER",
+                        url = "https://schoolmanager-nine.vercel.app/"
                 )
         },
         security = @SecurityRequirement(name = "bearerAuth")
@@ -44,11 +46,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @SecurityScheme(
         name = "bearerAuth",
-        description = "Access Token For My API",
+        description = "Bearer authentication scheme for accessing the API. A valid JWT token is required.",
         type = SecuritySchemeType.HTTP,
         scheme = "bearer",
         bearerFormat = "JWT"
 )
+@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class SwaggerConfig implements WebMvcConfigurer {
 
     @Bean
