@@ -1,5 +1,6 @@
 package com.school.service.implementation;
 
+import com.school.persistence.entities.Parent;
 import com.school.persistence.entities.Student;
 import com.school.persistence.entities.UserEntity;
 import com.school.persistence.enums.RoleEnum;
@@ -30,6 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -157,10 +159,29 @@ public class StudentServiceImpl implements GenericService
                         "Child not found with DNI: " + dni));
 
         // Devolver la información del hijo como DTO
-        return new StudentResponse(student.getDni(), student.getName(), student.getLastName(), student.getYear(), student.getSession());
+        return new StudentResponse(student.getDni(), student.getName(), student.getLastName(), student.getYear(), student.getSession(), null, null);
     }
 
     public Optional<Student> findStudentByDni(String dni) {
         return studentRepository.findByDni(dni);
+    }
+
+    public StudentResponse getStudentAndParentByDni(String dni) {
+        // Buscar el hijo por DNI
+        Student student = studentRepository.findByDniWithParents(dni)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Child not found with DNI: " + dni));
+
+        // Obtener la lista de padres
+        Set<Parent> parents = student.getParents();
+
+        if (parents == null || parents.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "No parents found for the child with DNI: " + dni);
+        }
+        Parent parent = parents.iterator().next();
+
+        // Devolver la información del hijo como DTO
+        return new StudentResponse(student.getDni(), student.getName(), student.getLastName(), student.getYear(), student.getSession(), parent.getName(), parent.getLastName());
     }
 }
