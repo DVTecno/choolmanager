@@ -99,7 +99,7 @@ public class SecurityConfig {
                 "http://localhost:8080",
                 "https://schoolmanager-nine.vercel.app",
                 "https://schoolmanager-nzlyngd5b-dvtecnos-projects.vercel.app",
-                "https://schoolmanager-production.up.railway.app"));
+                "https://choolmanager-production.up.railway.app"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
