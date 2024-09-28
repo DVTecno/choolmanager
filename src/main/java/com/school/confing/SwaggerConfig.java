@@ -38,7 +38,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                 ),
                 @Server(
                         description = "PROD SERVER",
-                        url = "https://schoolmanager-nine.vercel.app/"
+                        url = "https://choolmanager-production.up.railway.app/"
                 )
         },
         security = @SecurityRequirement(name = "bearerAuth")
